@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ENTDEV Interactive — инди-студия. Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель">
+  <meta name="theme-color" content="#0d0d0d">
+
+  <!-- Favicon (inline SVG, чтобы не нарушать ограничение «один файл») -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%234a7c59'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='19' font-weight='bold' text-anchor='middle' fill='%230d0d0d'%3EE%3C/text%3E%3C/svg%3E">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="ENTDEV Interactive">
+  <meta property="og:title" id="ogTitle" content="ENTDEV Interactive — Создаём миры, в которые хочется вернуться">
+  <meta property="og:description" id="ogDesc" content="Инди-студия: Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" id="twTitle" content="ENTDEV Interactive — Создаём миры, в которые хочется вернуться">
+  <meta name="twitter:description" id="twDesc" content="Инди-студия: Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель">
+
+  <title>ENTDEV Interactive — Создаём миры, в которые хочется вернуться</title>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ENTDEV Interactive",
+    "description": "Инди-студия: Pixel Art игры и Minecraft-сериалы",
+    "email": "hello@entdev.ru",
+    "sameAs": [
+      "https://www.youtube.com/",
+      "https://discord.com/",
+      "https://t.me/",
+      "https://vk.com/"
+    ]
+  }
+  </script>
+
+  <!-- Класс js добавляется ДО первой отрисовки: без JS контент остаётся видимым -->
+  <script>document.documentElement.classList.add("js");</script>
+
+  <style>
+    /* ========== 1. CSS Variables ========== */
+    :root {
+      --bg-deep: #0d0d0d;
+      --bg-main: #1a1a1a;
+      --bg-card: #222222;
+      --bg-elevated: #2a2a2a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #a0a0a0;
+      --text-muted: #8a8a8a;
+      --accent-green: #4a7c59;
+      --accent-green-light: #6b9e7a;
+      --accent-orange: #c47a3a;
+      --orange-light: #d48a4a;
+      --accent-blue: #5a9ec9;
+      --blue-light: #7ab4d9;
+      --danger: #e05a5a;
+      --border: #333333;
+      --border-light: #444444;
+      --shadow: rgba(0, 0, 0, 0.5);
+      --on-accent: #0d0d0d;
+      --grad-avatar-1: linear-gradient(135deg, #4a7c59, #6b9e7a);
+      --grad-avatar-2: linear-gradient(135deg, #c47a3a, #d48a4a);
+      --grad-avatar-3: linear-gradient(135deg, #5a9ec9, #7ab4d9);
+      --grad-avatar-4: linear-gradient(135deg, #7a5a9e, #9a7ab9);
+      --grad-avatar-5: linear-gradient(135deg, #9e7a4a, #b9945a);
+      --font-heading: "Courier New", Courier, monospace;
+      --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --header-h: 64px;
+      --radius: 2px;                        /* pixel-art: острые углы */
+      --pixel-shadow: 0 4px 0 rgba(0, 0, 0, 0.55);
+      --transition: 0.25s ease;
+    }
+
+    /* ========== 2. Reset & Base ========== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--header-h);
+      scrollbar-gutter: stable;
+      /* pixel-скроллбар (Firefox) */
+      scrollbar-color: var(--bg-elevated) var(--bg-deep);
+    }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-deep);
+      /* тонкая «сетка пиксель-арта» на фоне */
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 8px 8px;
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    body.dialog-open { overflow: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    [hidden] { display: none !important; }
+
+    /* Pixel-скроллбар (WebKit/Blink) */
+    ::-webkit-scrollbar { width: 12px; height: 12px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border: 2px solid var(--bg-deep); border-radius: 0; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+
+    ::selection { background: var(--accent-green); color: var(--on-accent); }
+
+    button, input, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      border: none;
+      background: none;
+    }
+    button { cursor: pointer; }
+
+    /* Единый видимый фокус */
+    :focus-visible {
+      outline: 2px solid var(--accent-green-light);
+      outline-offset: 2px;
+    }
+
+    /* Skip-link */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 3000;
+      padding: 0.6rem 1rem;
+      background: var(--accent-green);
+      color: var(--on-accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 0 0 var(--radius) 0;
+    }
+    .skip-link:focus { left: 0; }
+
+    /* Subtle scanline + noise overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 900;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.035) 2px,
+          rgba(0, 0, 0, 0.035) 4px
+        );
+      opacity: 0.7;
+    }
+
+    /* ========== 3. Typography ========== */
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.25;
+      -webkit-font-smoothing: none;
+      font-smooth: never;
+      /* пиксельная «тень-ступенька» */
+      text-shadow: 0 3px 0 rgba(0, 0, 0, 0.55);
+    }
+    h1 { font-size: clamp(1.75rem, 4vw, 2.75rem); }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1.5rem; }
+    h3 { font-size: 1.15rem; }
+    p { color: var(--text-secondary); }
+    .section-title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    /* пиксельная полоса-ступенька под заголовком */
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: var(--accent-green);
+      margin: 0.75rem auto 0;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    /* ========== 4. Layout ========== */
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+    section { padding: 5rem 0; position: relative; }
+    section.section--alt { background: var(--bg-main); }
+
+    /* ========== 5. Header ========== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-h);
+      background: rgba(13, 13, 13, 0.94);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--border);
+      z-index: 1000;
+      transition: background var(--transition);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      height: 100%;
+    }
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: 0.06em;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6);
+      white-space: nowrap;
+    }
+    @media (max-width: 480px) {
+      .logo { font-size: 0.9rem; }
+    }
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-green-light));
+      border: 1px solid var(--border-light);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+      display: grid;
+      place-items: center;
+      font-size: 0.7rem;
+      color: var(--on-accent);
+      font-weight: 900;
+      image-rendering: pixelated;
+    }
+
+    /* Language switcher */
+    .lang-switcher {
+      display: flex;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .lang-btn {
+      padding: 0.3rem 0.5rem;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      transition: background var(--transition), color var(--transition);
+    }
+    .lang-btn + .lang-btn { border-left: 2px solid var(--border-light); }
+    .lang-btn:hover { color: var(--text-primary); }
+    .lang-btn.active {
+      background: var(--accent-green);
+      color: var(--on-accent);
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .nav { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-link {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      border-radius: var(--radius);
+      transition: color var(--transition), background var(--transition);
+      position: relative;
+    }
+    .nav-link:hover,
+    .nav-link.active { color: var(--accent-green-light); }
+    .nav-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 3px;
+      background: var(--accent-green);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 3px;
+      background: var(--text-primary);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+      transition: transform var(--transition), opacity var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* Mobile nav */
+    .nav-mobile {
+      position: fixed;
+      top: var(--header-h);
+      left: 0;
+      right: 0;
+      background: var(--bg-deep);
+      border-bottom: 3px solid var(--border-light);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 999;
+      visibility: hidden;
+      transform: translateY(-120%);
+      transition: transform 0.3s ease, visibility 0.3s ease;
+    }
+    .nav-mobile.open { visibility: visible; transform: translateY(0); }
+    .nav-mobile .nav-link { padding: 0.75rem 1rem; font-size: 1rem; }
+
+    /* ========== 6. Buttons ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--radius);
+      border: 2px solid transparent;
+      box-shadow: var(--pixel-shadow);
+      transition: background var(--transition), color var(--transition),
+                  border-color var(--transition), transform 0.15s ease,
+                  box-shadow 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.55); }
+    .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55); }
+    .btn-primary { background: var(--accent-green); color: var(--on-accent); }
+    .btn-primary:hover { background: var(--accent-green-light); }
+    .btn-primary:disabled { opacity: 0.7; cursor: wait; transform: none; box-shadow: none; }
+    .btn-outline { border-color: var(--accent-green); color: var(--accent-green-light); }
+    .btn-outline:hover { background: var(--accent-green); color: var(--on-accent); }
+    .btn-orange { background: var(--accent-orange); color: var(--on-accent); }
+    .btn-orange:hover { background: var(--orange-light); }
+    .btn-blue { border-color: var(--accent-blue); color: var(--accent-blue); }
+    .btn-blue:hover { background: var(--accent-blue); color: var(--on-accent); }
+    .btn-sm { padding: 0.45rem 0.9rem; font-size: 0.75rem; }
+
+    /* ========== 7. Hero ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: var(--header-h);
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(74, 124, 89, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(196, 122, 58, 0.08) 0%, transparent 45%),
+        var(--bg-deep);
+      position: relative;
+      overflow: hidden;
+    }
+    @supports (min-height: 100svh) {
+      .hero { min-height: 100svh; }
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to top, var(--bg-deep), transparent);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 680px; position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      background: rgba(74, 124, 89, 0.2);
+      border: 1px solid var(--accent-green);
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-green-light);
+      margin-bottom: 1.25rem;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+    }
+    .hero h1 {
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+      text-shadow: 0 3px 0 rgba(0, 0, 0, 0.65), 3px 3px 0 rgba(0, 0, 0, 0.65);
+    }
+    .hero h1 span { color: var(--accent-green-light); }
+    .hero-slogan {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      font-style: italic;
+    }
+    .hero-desc { margin-bottom: 2rem; max-width: 520px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    /* Pixel grid decoration */
+    .hero-deco {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 280px;
+      height: 280px;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(var(--accent-green) 1px, transparent 1px),
+        linear-gradient(90deg, var(--accent-green) 1px, transparent 1px);
+      background-size: 16px 16px;
+      border: 3px solid var(--accent-green);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4);
+      image-rendering: pixelated;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .hero-deco { display: none; }
+    }
+
+    /* ========== 8. Cards ========== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .cards-grid--narrow { max-width: 520px; margin: 0 auto; }
+    .card {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+      transition: border-color var(--transition), transform var(--transition),
+                  box-shadow var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      border-color: var(--accent-green);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.45);
+    }
+    .card-media {
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--border-light);
+    }
+    .card-media-rv {
+      background:
+        linear-gradient(135deg, rgba(74, 124, 89, 0.4) 0%, rgba(13, 13, 13, 0.9) 100%),
+        repeating-linear-gradient(
+          45deg,
+          #1a2e1a 0px, #1a2e1a 8px,
+          #0d1a0d 8px, #0d1a0d 16px
+        );
+    }
+    .card-media-mll {
+      background:
+        linear-gradient(135deg, rgba(90, 158, 201, 0.35) 0%, rgba(13, 13, 13, 0.9) 100%),
+        radial-gradient(circle at 30% 40%, #2a4a5a 0%, #0d0d0d 70%);
+    }
+    .card-media-citadel {
+      background:
+        linear-gradient(135deg, rgba(196, 122, 58, 0.35) 0%, rgba(13, 13, 13, 0.9) 100%),
+        repeating-linear-gradient(
+          0deg,
+          #2a1a0d 0px, #2a1a0d 4px,
+          #1a1008 4px, #1a1008 8px
+        );
+    }
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+    }
+    .badge-dev { background: var(--accent-green); color: var(--on-accent); }
+    .badge-edu { background: var(--accent-blue); color: var(--on-accent); }
+    .badge-series { background: var(--accent-orange); color: var(--on-accent); }
+    .card-body { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
+    .card-body h3 { margin-bottom: 0.35rem; color: var(--text-primary); }
+    .card-genre {
+      font-size: 0.8rem;
+      font-family: var(--font-heading);
+      color: var(--accent-green-light);
+      margin-bottom: 0.75rem;
+    }
+    .card-genre.blue { color: var(--accent-blue); }
+    .card-genre.orange { color: var(--accent-orange); }
+    .card-desc { font-size: 0.9rem; margin-bottom: 1rem; flex: 1; }
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    .card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    /* ========== 9. About ========== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .about-text p { margin-bottom: 1rem; }
+    .about-text strong { color: var(--text-primary); }
+    .about-features { display: grid; gap: 1rem; }
+    .feature {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .feature:hover { border-color: var(--accent-green); transform: translateX(2px); }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      background: rgba(74, 124, 89, 0.2);
+      border: 1px solid var(--accent-green);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      color: var(--accent-green-light);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+    }
+    .feature h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .feature p { font-size: 0.85rem; margin: 0; }
+    .tools-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+    .tool-tag {
+      padding: 0.3rem 0.7rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-family: var(--font-heading);
+      color: var(--text-secondary);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+    }
+    .tool-tag:hover { border-color: var(--accent-green); color: var(--accent-green-light); }
+
+    /* ========== 10. Team ========== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.25rem;
+    }
+    .team-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+      transition: border-color var(--transition), transform var(--transition),
+                  box-shadow var(--transition);
+    }
+    .team-card:hover {
+      border-color: var(--accent-green);
+      transform: translateY(-3px);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4);
+    }
+    .avatar {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1rem;
+      border-radius: 4px;
+      border: 2px solid var(--border-light);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--on-accent);
+      image-rendering: pixelated;
+    }
+    .avatar-1 { background: var(--grad-avatar-1); }
+    .avatar-2 { background: var(--grad-avatar-2); }
+    .avatar-3 { background: var(--grad-avatar-3); }
+    .avatar-4 { background: var(--grad-avatar-4); }
+    .avatar-5 { background: var(--grad-avatar-5); }
+    .team-card h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+    .team-role { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+
+    /* ========== 11. Contacts ========== */
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+    .form-group label {
+      font-size: 0.85rem;
+      font-family: var(--font-heading);
+      color: var(--text-secondary);
+    }
+    .form-group input,
+    .form-group textarea {
+      padding: 0.7rem 0.9rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+      transition: border-color var(--transition);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent-green); }
+    .form-group input[aria-invalid="true"],
+    .form-group textarea[aria-invalid="true"] { border-color: var(--danger); }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .form-error { color: var(--danger); font-size: 0.8rem; font-family: var(--font-heading); }
+    .form-success {
+      padding: 0.75rem 1rem;
+      background: rgba(74, 124, 89, 0.2);
+      border: 2px solid var(--accent-green);
+      border-radius: var(--radius);
+      color: var(--accent-green-light);
+      font-size: 0.9rem;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    }
+    .socials { display: flex; flex-direction: column; gap: 1rem; }
+    .socials h3 { margin-bottom: 0.5rem; }
+    .social-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+      transition: border-color var(--transition), color var(--transition),
+                  box-shadow var(--transition);
+    }
+    .social-link:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green-light);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+    }
+    .contact-email { margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-secondary); }
+    .contact-email a { color: var(--accent-green-light); }
+    .contact-email a:hover { text-decoration: underline; }
+
+    /* ========== 12. Footer ========== */
+    .footer {
+      background: var(--bg-deep);
+      border-top: 2px solid var(--border);
+      padding: 2.5rem 0 1.5rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6);
+    }
+    .footer-copy { font-size: 0.85rem; color: var(--text-muted); }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+    .footer-nav a {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .footer-nav a:hover { color: var(--accent-green-light); }
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1.25rem;
+      border-top: 2px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ========== 13. Back to top ========== */
+    .back-to-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      background: var(--accent-green);
+      color: var(--on-accent);
+      border-radius: var(--radius);
+      border: 2px solid var(--border-light);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity var(--transition), visibility var(--transition),
+                  transform var(--transition), box-shadow var(--transition);
+      z-index: 950;
+    }
+    .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .back-to-top:hover { background: var(--accent-green-light); box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5); }
+
+    /* ========== 14. Modal (native dialog) ========== */
+    dialog.modal {
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      width: min(560px, 100%);
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 1.75rem;
+      position: relative;
+      margin: auto;
+      box-shadow: 0 10px 0 rgba(0, 0, 0, 0.5);
+    }
+    dialog.modal::backdrop {
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 255, 255, 0.025) 3px, rgba(255, 255, 255, 0.025) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255, 255, 255, 0.025) 3px, rgba(255, 255, 255, 0.025) 4px),
+        rgba(0, 0, 0, 0.8);
+    }
+    dialog.modal[open] { animation: modal-in 0.25s ease; }
+    @keyframes modal-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .modal-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      border-radius: var(--radius);
+      transition: color var(--transition), background var(--transition);
+    }
+    .modal-close:hover { color: var(--text-primary); background: var(--bg-elevated); }
+    .modal h3 { margin-bottom: 0.75rem; padding-right: 2rem; }
+    .modal p { margin-bottom: 0.75rem; font-size: 0.95rem; }
+    .modal-genre { margin-bottom: 0.75rem; }
+    .modal-list {
+      margin: 0.75rem 0 1rem;
+      padding-left: 1.25rem;
+      list-style: disc;
+    }
+    .modal-list li { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.35rem; }
+    .modal-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1rem 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ========== 15. Scroll reveal (только при работающем JS) ========== */
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .js .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ========== 16. Responsive ========== */
+    @media (max-width: 768px) {
+      .nav { display: none; }
+      .hamburger { display: flex; }
+      .about-grid,
+      .contacts-grid { grid-template-columns: 1fr; }
+      section { padding: 3.5rem 0; }
+      .hero { min-height: auto; padding: calc(var(--header-h) + 3rem) 0 4rem; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 400px) {
+      .team-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+      .lang-btn { padding: 0.25rem 0.4rem; font-size: 0.65rem; }
+    }
+
+    /* ========== 17. Reduced motion ========== */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link" data-i18n="skip">Перейти к содержимому</a>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#hero" class="logo" data-i18n-aria="logo.home" aria-label="ENTDEV Interactive — на главную">
+        <span class="logo-icon" aria-hidden="true">E</span>
+        ENTDEV Interactive
+      </a>
+
+      <!-- Language switcher -->
+      <div class="lang-switcher" role="group" data-i18n-aria="lang.selector" aria-label="Сменить язык">
+        <button class="lang-btn" type="button" data-lang="ru" aria-pressed="false">RU</button>
+        <button class="lang-btn" type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button class="lang-btn" type="button" data-lang="ja" aria-pressed="false">JA</button>
+      </div>
+
+      <!-- Навигация генерируется из единого массива в JS; noscript — фолбэк без JS -->
+      <nav class="nav" id="navDesktop" aria-label="Основная навигация">
+        <noscript>
+          <a href="#hero" class="nav-link active" data-section="hero">Главная</a>
+          <a href="#games" class="nav-link" data-section="games">Игры</a>
+          <a href="#series" class="nav-link" data-section="series">Сериалы</a>
+          <a href="#about" class="nav-link" data-section="about">О студии</a>
+          <a href="#team" class="nav-link" data-section="team">Команда</a>
+          <a href="#contacts" class="nav-link" data-section="contacts">Контакты</a>
+        </noscript>
+      </nav>
+      <button class="hamburger" id="hamburger" aria-label="Открыть меню" aria-expanded="false" aria-controls="navMobile" type="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile navigation (генерация из того же массива) -->
+  <nav class="nav-mobile" id="navMobile" aria-label="Мобильная навигация"></nav>
+
+  <main id="main" tabindex="-1">
+    <!-- ========== HERO ========== -->
+    <section class="hero" id="hero">
+      <div class="container">
+        <div class="hero-content">
+          <span class="hero-badge" data-i18n="hero.badge">Инди-студия · Pixel Art · Minecraft</span>
+          <h1>ENTDEV <span>Interactive</span></h1>
+          <p class="hero-slogan" data-i18n="hero.slogan">«Создаём миры, в которые хочется вернуться»</p>
+          <p class="hero-desc" data-i18n="hero.desc">
+            Мы разрабатываем атмосферные 2D-игры в стиле Pixel Art и снимаем сериалы в Minecraft.
+            Глубокие истории, внимание к деталям и миры, которые остаются с вами надолго.
+          </p>
+          <div class="hero-actions">
+            <a href="#games" class="btn btn-primary" data-i18n="hero.ctaProjects">Наши проекты</a>
+            <a href="#contacts" class="btn btn-outline" data-i18n="hero.ctaContacts">Связаться с нами</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-deco" aria-hidden="true"></div>
+    </section>
+
+    <!-- ========== GAMES ========== -->
+    <section id="games" class="section--alt">
+      <div class="container">
+        <h2 class="section-title reveal" data-i18n="games.title">Игры</h2>
+        <div class="cards-grid">
+          <!-- Rule, Vlandria -->
+          <article class="card reveal">
+            <div class="card-media card-media-rv" role="img" data-i18n-aria="games.rv.media" aria-label="Обложка Rule, Vlandria">
+              <span class="card-badge badge-dev" data-i18n="games.badge.dev">В разработке</span>
+            </div>
+            <div class="card-body">
+              <h3>Rule, Vlandria</h3>
+              <p class="card-genre" data-i18n="games.rv.genre">2D-метроидвания · Мрачное фэнтези</p>
+              <p class="card-desc" data-i18n="games.rv.desc">
+                Пиксельная метроидвания в мире Гардынии (1730-е). Таро теряет память после взрыва в шахтах
+                и пытается вспомнить прошлое. 16 Идолов, устройство Кабулатор, «Радиация», 6–8 концовок.
+              </p>
+              <div class="card-meta">
+                <span>Unity</span>
+                <span>Pixel Art</span>
+                <span data-i18n="games.rv.meta3">Зелёный мотив</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary btn-sm" data-modal="modal-rv" type="button" data-i18n="common.more">Подробнее</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- My Little Laboratory -->
+          <article class="card reveal">
+            <div class="card-media card-media-mll" role="img" data-i18n-aria="games.mll.media" aria-label="Обложка My Little Laboratory">
+              <span class="card-badge badge-edu" data-i18n="games.badge.edu">Образовательная</span>
+            </div>
+            <div class="card-body">
+              <h3>My Little Laboratory</h3>
+              <p class="card-genre blue" data-i18n="games.mll.genre">Симулятор · Образование</p>
+              <p class="card-desc" data-i18n="games.mll.desc">
+                Образовательный симулятор химической лаборатории. Открывайте элементы ПСХЭ им. Менделеева,
+                разлагая сложные вещества. Квесты, награды, валюта — химия становится понятной и увлекательной.
+              </p>
+              <div class="card-meta">
+                <span data-i18n="games.mll.meta1">Симулятор</span>
+                <span data-i18n="games.mll.meta2">Для школьников</span>
+                <span data-i18n="games.mll.meta3">Квесты</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-blue btn-sm" data-modal="modal-mll" type="button" data-i18n="common.more">Подробнее</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SERIES ========== -->
+    <section id="series">
+      <div class="container">
+        <h2 class="section-title reveal" data-i18n="series.title">Сериалы</h2>
+        <div class="cards-grid cards-grid--narrow">
+          <article class="card reveal">
+            <div class="card-media card-media-citadel" role="img" data-i18n-aria="series.citadel.media" aria-label="Обложка сериала Цитадель">
+              <span class="card-badge badge-series" data-i18n="series.badge">Minecraft-сериал</span>
+            </div>
+            <div class="card-body">
+              <h3 data-i18n="series.citadel.title">«Цитадель» (Апокалипсис)</h3>
+              <p class="card-genre orange" data-i18n="series.citadel.genre">Постапокалипсис · Драма · Выживание</p>
+              <p class="card-desc" data-i18n="series.citadel.desc">
+                Джорджи Крисс — бывший английский секретный агент и генерал — выживает после вируса
+                из Шотландской Зоны Отчуждения. Люди живут на крышах. Путь к безопасной зоне, мутанты,
+                бандиты, моральные дилеммы и флешбэки.
+              </p>
+              <div class="card-meta">
+                <span data-i18n="series.citadel.meta1">Многосерийный</span>
+                <span>Minecraft</span>
+              </div>
+              <div class="card-actions">
+                <a href="https://www.youtube.com/watch?v=AXQeUorpIzQ"
+                   class="btn btn-orange btn-sm"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-i18n="series.citadel.youtube">
+                  Смотреть на YouTube
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ABOUT ========== -->
+    <section id="about" class="section--alt">
+      <div class="container">
+        <h2 class="section-title reveal" data-i18n="about.title">О студии</h2>
+        <div class="about-grid">
+          <div class="about-text reveal">
+            <p>
+              <strong>ENTDEV Interactive</strong><span data-i18n="about.p1">
+                — молодая инди-студия, специализирующаяся на Pixel Art играх и Minecraft-сериалах.
+                Мы верим, что даже небольшая команда может создавать миры, которые остаются с игроком надолго.
+              </span>
+            </p>
+            <p data-i18n="about.p2">
+              Наша философия — атмосферные миры, глубокие истории и внимание к деталям.
+              Каждая сцена, каждый пиксель и каждая реплика работают на погружение.
+            </p>
+            <div class="tools-list">
+              <span class="tool-tag">Unity</span>
+              <span class="tool-tag">Minecraft</span>
+              <span class="tool-tag">Pixel Art</span>
+              <span class="tool-tag" data-i18n="about.tool3d">3D-моделирование</span>
+            </div>
+          </div>
+          <div class="about-features reveal">
+            <div class="feature">
+              <div class="feature-icon" aria-hidden="true">◆</div>
+              <div>
+                <h4 data-i18n="about.feat1.title">Атмосфера</h4>
+                <p data-i18n="about.feat1.desc">Мрачное фэнтези, постапокалипсис, образовательные миры — каждый проект имеет свой голос.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon" aria-hidden="true">◇</div>
+              <div>
+                <h4 data-i18n="about.feat2.title">Истории</h4>
+                <p data-i18n="about.feat2.desc">Сценарии с моральными дилеммами, флешбэками и множественными концовками.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon" aria-hidden="true">●</div>
+              <div>
+                <h4 data-i18n="about.feat3.title">Детали</h4>
+                <p data-i18n="about.feat3.desc">Пиксель-арт, кастомные билды, продуманные механики и визуальные мотивы.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== TEAM ========== -->
+    <section id="team">
+      <div class="container">
+        <h2 class="section-title reveal" data-i18n="team.title">Команда</h2>
+        <div class="team-grid">
+          <div class="team-card reveal">
+            <div class="avatar avatar-1" aria-hidden="true">А</div>
+            <h3>Артём</h3>
+            <p class="team-role" data-i18n="team.role1">Гейм-дизайнер, художник, сценарист, билдер</p>
+          </div>
+          <div class="team-card reveal">
+            <div class="avatar avatar-2" aria-hidden="true">М</div>
+            <h3>Макс</h3>
+            <p class="team-role" data-i18n="team.role2">Монтажёр</p>
+          </div>
+          <div class="team-card reveal">
+            <div class="avatar avatar-3" aria-hidden="true">И</div>
+            <h3>Игорь</h3>
+            <p class="team-role" data-i18n="team.role3">3D-моделлер</p>
+          </div>
+          <div class="team-card reveal">
+            <div class="avatar avatar-4" aria-hidden="true">Ар</div>
+            <h3>Арсений</h3>
+            <p class="team-role" data-i18n="team.role4">Билдер</p>
+          </div>
+          <div class="team-card reveal">
+            <div class="avatar avatar-5" aria-hidden="true">Ал</div>
+            <h3>Александр</h3>
+            <p class="team-role" data-i18n="team.role5">Сценарист, художник, билдер</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONTACTS ========== -->
+    <section id="contacts" class="section--alt">
+      <div class="container">
+        <h2 class="section-title reveal" data-i18n="contacts.title">Контакты</h2>
+        <div class="contacts-grid">
+          <form class="contact-form reveal" id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="name" data-i18n="contacts.name.label">Имя</label>
+              <input type="text" id="name" name="name" placeholder="Ваше имя" required autocomplete="name" aria-describedby="nameError" data-i18n-placeholder="contacts.name.ph">
+              <span class="form-error" id="nameError" role="alert" hidden data-i18n="contacts.name.err">Укажите имя</span>
+            </div>
+            <div class="form-group">
+              <label for="email" data-i18n="contacts.email.label">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email" aria-describedby="emailError" data-i18n-placeholder="contacts.email.ph">
+              <span class="form-error" id="emailError" role="alert" hidden data-i18n="contacts.email.err">Укажите корректный email</span>
+            </div>
+            <div class="form-group">
+              <label for="message" data-i18n="contacts.msg.label">Сообщение</label>
+              <textarea id="message" name="message" placeholder="Напишите нам..." required aria-describedby="messageError" data-i18n-placeholder="contacts.msg.ph"></textarea>
+              <span class="form-error" id="messageError" role="alert" hidden data-i18n="contacts.msg.err">Напишите сообщение</span>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn" data-i18n="contacts.submit">Отправить</button>
+            <div class="form-success" id="formSuccess" role="status" hidden data-i18n="contacts.success">Спасибо! Мы свяжемся с вами в ближайшее время.</div>
+          </form>
+          <div class="socials reveal">
+            <h3 data-i18n="contacts.socials">Мы в соцсетях</h3>
+            <!-- TODO: замените href на реальные адреса каналов/групп студии -->
+            <div class="social-links">
+              <a href="https://www.youtube.com/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="YouTube">YouTube</a>
+              <a href="https://discord.com/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Discord">Discord</a>
+              <a href="https://t.me/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Telegram">Telegram</a>
+              <a href="https://vk.com/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="VK">VK</a>
+            </div>
+            <p class="contact-email">
+              <span data-i18n="contacts.emailNote">Или напишите напрямую:</span><br>
+              <!-- TODO: замените на реальный адрес студии -->
+              <a href="mailto:hello@entdev.ru">hello@entdev.ru</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">ENTDEV Interactive</div>
+          <p class="footer-copy" data-i18n="footer.copy">Создаём миры, в которые хочется вернуться</p>
+        </div>
+        <!-- Навигация в подвале генерируется из того же массива -->
+        <nav class="footer-nav" aria-label="Навигация в подвале" id="footerNav">
+          <noscript>
+            <a href="#hero">Главная</a>
+            <a href="#games">Игры</a>
+            <a href="#series">Сериалы</a>
+            <a href="#about">О студии</a>
+            <a href="#team">Команда</a>
+            <a href="#contacts">Контакты</a>
+          </noscript>
+        </nav>
+      </div>
+      <div class="footer-bottom" data-i18n="footer.bottom">
+        © 2024–2026 ENTDEV Interactive. Все права защищены.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" type="button" data-i18n-aria="common.toTop" aria-label="Наверх">↑</button>
+
+  <!-- ========== MODALS (native dialog) ========== -->
+  <dialog class="modal" id="modal-rv" aria-labelledby="modal-rv-title">
+    <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
+    <h3 id="modal-rv-title">Rule, Vlandria</h3>
+    <p class="card-genre modal-genre" data-i18n="modals.rv.genre">2D-пиксельная метроидвания · Мрачное фэнтези</p>
+    <p data-i18n="modals.rv.p1">
+      Действие разворачивается в мире Гардынии в 1730-х годах. Главный герой Таро теряет память
+      после взрыва в шахтах и отправляется в путешествие, чтобы вспомнить своё прошлое.
+    </p>
+    <ul class="modal-list">
+      <li data-i18n="modals.rv.li1">16 Идолов — ключевые артефакты мира</li>
+      <li data-i18n="modals.rv.li2">Устройство «Кабулатор»</li>
+      <li data-i18n="modals.rv.li3">Механика «Радиация»</li>
+      <li data-i18n="modals.rv.li4">6–8 концовок</li>
+      <li data-i18n="modals.rv.li5">Зелёный визуальный мотив</li>
+      <li data-i18n="modals.rv.li6">Разработка на Unity</li>
+    </ul>
+    <div class="modal-meta">
+      <span data-i18n="modals.rv.status">Статус: в разработке</span>
+      <span data-i18n="modals.rv.genreLabel">Жанр: метроидвания</span>
+      <span data-i18n="modals.rv.style">Стиль: Pixel Art</span>
+    </div>
+    <button class="btn btn-outline btn-sm" data-close type="button" data-i18n="common.close">Закрыть</button>
+  </dialog>
+
+  <dialog class="modal" id="modal-mll" aria-labelledby="modal-mll-title">
+    <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
+    <h3 id="modal-mll-title">My Little Laboratory</h3>
+    <p class="card-genre blue modal-genre" data-i18n="modals.mll.genre">Образовательный симулятор химической лаборатории</p>
+    <p data-i18n="modals.mll.p1">
+      Игра помогает школьникам понять химию через практику. Задача — открытие химических элементов
+      периодической системы им. Менделеева путём разложения сложных веществ на простые.
+    </p>
+    <ul class="modal-list">
+      <li data-i18n="modals.mll.li1">Квесты и задания</li>
+      <li data-i18n="modals.mll.li2">Награды: вещества, инструменты, валюта</li>
+      <li data-i18n="modals.mll.li3">Постепенное открытие элементов ПСХЭ</li>
+      <li data-i18n="modals.mll.li4">Подходит для изучения химии</li>
+    </ul>
+    <div class="modal-meta">
+      <span data-i18n="modals.mll.meta1">Жанр: симулятор / образование</span>
+      <span data-i18n="modals.mll.meta2">Аудитория: школьники</span>
+    </div>
+    <button class="btn btn-outline btn-sm" data-close type="button" data-i18n="common.close">Закрыть</button>
+  </dialog>
+
+  <script>
+    (() => {
+      "use strict";
+
+      /* ================================================================
+         I18N: СЛОВАРИ (РУССКИЙ / АНГЛИЙСКИЙ / ЯПОНСКИЙ)
+         ================================================================ */
+      const LOCALES = ["ru", "en", "ja"];
+      const STORAGE_KEY = "entdev-lang";
+
+      const I18N = {
+        ru: {
+          "skip": "Перейти к содержимому",
+          "logo.home": "ENTDEV Interactive — на главную",
+          "lang.selector": "Сменить язык",
+          "menu.open": "Открыть меню",
+          "menu.close": "Закрыть меню",
+          "hero.badge": "Инди-студия · Pixel Art · Minecraft",
+          "hero.slogan": "«Создаём миры, в которые хочется вернуться»",
+          "hero.desc": "Мы разрабатываем атмосферные 2D-игры в стиле Pixel Art и снимаем сериалы в Minecraft. Глубокие истории, внимание к деталям и миры, которые остаются с вами надолго.",
+          "hero.ctaProjects": "Наши проекты",
+          "hero.ctaContacts": "Связаться с нами",
+          "games.title": "Игры",
+          "games.badge.dev": "В разработке",
+          "games.badge.edu": "Образовательная",
+          "games.rv.media": "Обложка Rule, Vlandria",
+          "games.rv.genre": "2D-метроидвания · Мрачное фэнтези",
+          "games.rv.desc": "Пиксельная метроидвания в мире Гардынии (1730-е). Таро теряет память после взрыва в шахтах и пытается вспомнить прошлое. 16 Идолов, устройство Кабулатор, «Радиация», 6–8 концовок.",
+          "games.rv.meta3": "Зелёный мотив",
+          "games.mll.media": "Обложка My Little Laboratory",
+          "games.mll.genre": "Симулятор · Образование",
+          "games.mll.desc": "Образовательный симулятор химической лаборатории. Открывайте элементы ПСХЭ им. Менделеева, разлагая сложные вещества. Квесты, награды, валюта — химия становится понятной и увлекательной.",
+          "games.mll.meta1": "Симулятор",
+          "games.mll.meta2": "Для школьников",
+          "games.mll.meta3": "Квесты",
+          "common.more": "Подробнее",
+          "common.close": "Закрыть",
+          "common.closeAria": "Закрыть",
+          "common.toTop": "Наверх",
+          "series.title": "Сериалы",
+          "series.badge": "Minecraft-сериал",
+          "series.citadel.media": "Обложка сериала Цитадель",
+          "series.citadel.title": "«Цитадель» (Апокалипсис)",
+          "series.citadel.genre": "Постапокалипсис · Драма · Выживание",
+          "series.citadel.desc": "Джорджи Крисс — бывший английский секретный агент и генерал — выживает после вируса из Шотландской Зоны Отчуждения. Люди живут на крышах. Путь к безопасной зоне, мутанты, бандиты, моральные дилеммы и флешбэки.",
+          "series.citadel.meta1": "Многосерийный",
+          "series.citadel.youtube": "Смотреть на YouTube",
+          "about.title": "О студии",
+          "about.p1": " — молодая инди-студия, специализирующаяся на Pixel Art играх и Minecraft-сериалах. Мы верим, что даже небольшая команда может создавать миры, которые остаются с игроком надолго.",
+          "about.p2": "Наша философия — атмосферные миры, глубокие истории и внимание к деталям. Каждая сцена, каждый пиксель и каждая реплика работают на погружение.",
+          "about.tool3d": "3D-моделирование",
+          "about.feat1.title": "Атмосфера",
+          "about.feat1.desc": "Мрачное фэнтези, постапокалипсис, образовательные миры — каждый проект имеет свой голос.",
+          "about.feat2.title": "Истории",
+          "about.feat2.desc": "Сценарии с моральными дилеммами, флешбэками и множественными концовками.",
+          "about.feat3.title": "Детали",
+          "about.feat3.desc": "Пиксель-арт, кастомные билды, продуманные механики и визуальные мотивы.",
+          "team.title": "Команда",
+          "team.role1": "Гейм-дизайнер, художник, сценарист, билдер",
+          "team.role2": "Монтажёр",
+          "team.role3": "3D-моделлер",
+          "team.role4": "Билдер",
+          "team.role5": "Сценарист, художник, билдер",
+          "contacts.title": "Контакты",
+          "contacts.name.label": "Имя",
+          "contacts.name.ph": "Ваше имя",
+          "contacts.name.err": "Укажите имя",
+          "contacts.email.label": "Email",
+          "contacts.email.ph": "you@example.com",
+          "contacts.email.err": "Укажите корректный email",
+          "contacts.msg.label": "Сообщение",
+          "contacts.msg.ph": "Напишите нам...",
+          "contacts.msg.err": "Напишите сообщение",
+          "contacts.submit": "Отправить",
+          "contacts.sending": "Отправка…",
+          "contacts.success": "Спасибо! Мы свяжемся с вами в ближайшее время.",
+          "contacts.socials": "Мы в соцсетях",
+          "contacts.emailNote": "Или напишите напрямую:",
+          "nav.hero": "Главная", "nav.games": "Игры", "nav.series": "Сериалы",
+          "nav.about": "О студии", "nav.team": "Команда", "nav.contacts": "Контакты",
+          "footer.copy": "Создаём миры, в которые хочется вернуться",
+          "footer.bottom": "© 2024–2026 ENTDEV Interactive. Все права защищены.",
+          "meta.title": "ENTDEV Interactive — Создаём миры, в которые хочется вернуться",
+          "meta.desc": "ENTDEV Interactive — инди-студия. Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель",
+          "modals.rv.genre": "2D-пиксельная метроидвания · Мрачное фэнтези",
+          "modals.rv.p1": "Действие разворачивается в мире Гардынии в 1730-х годах. Главный герой Таро теряет память после взрыва в шахтах и отправляется в путешествие, чтобы вспомнить своё прошлое.",
+          "modals.rv.li1": "16 Идолов — ключевые артефакты мира",
+          "modals.rv.li2": "Устройство «Кабулатор»",
+          "modals.rv.li3": "Механика «Радиация»",
+          "modals.rv.li4": "6–8 концовок",
+          "modals.rv.li5": "Зелёный визуальный мотив",
+          "modals.rv.li6": "Разработка на Unity",
+          "modals.rv.status": "Статус: в разработке",
+          "modals.rv.genreLabel": "Жанр: метроидвания",
+          "modals.rv.style": "Стиль: Pixel Art",
+          "modals.mll.genre": "Образовательный симулятор химической лаборатории",
+          "modals.mll.p1": "Игра помогает школьникам понять химию через практику. Задача — открытие химических элементов периодической системы им. Менделеева путём разложения сложных веществ на простые.",
+          "modals.mll.li1": "Квесты и задания",
+          "modals.mll.li2": "Награды: вещества, инструменты, валюта",
+          "modals.mll.li3": "Постепенное открытие элементов ПСХЭ",
+          "modals.mll.li4": "Подходит для изучения химии",
+          "modals.mll.meta1": "Жанр: симулятор / образование",
+          "modals.mll.meta2": "Аудитория: школьники"
+        },
+
+        en: {
+          "skip": "Skip to content",
+          "logo.home": "ENTDEV Interactive — back to home",
+          "lang.selector": "Change language",
+          "menu.open": "Open menu",
+          "menu.close": "Close menu",
+          "hero.badge": "Indie studio · Pixel Art · Minecraft",
+          "hero.slogan": "«We create worlds worth returning to»",
+          "hero.desc": "We craft atmospheric 2D Pixel Art games and produce Minecraft series. Deep stories, attention to detail, and worlds that stay with you long after the credits roll.",
+          "hero.ctaProjects": "Our projects",
+          "hero.ctaContacts": "Contact us",
+          "games.title": "Games",
+          "games.badge.dev": "In development",
+          "games.badge.edu": "Educational",
+          "games.rv.media": "Rule, Vlandria cover",
+          "games.rv.genre": "2D Metroidvania · Dark Fantasy",
+          "games.rv.desc": "A pixel Metroidvania set in the world of Gardania (1730s). Taro loses his memory after a mine explosion and sets out to remember his past. 16 Idols, the Kabulator device, the «Radiation» mechanic, 6–8 endings.",
+          "games.rv.meta3": "Green motif",
+          "games.mll.media": "My Little Laboratory cover",
+          "games.mll.genre": "Simulator · Education",
+          "games.mll.desc": "An educational chemistry lab simulator. Unlock Mendeleev's periodic table elements by breaking down complex substances. Quests, rewards, currency — chemistry becomes clear and fun.",
+          "games.mll.meta1": "Simulator",
+          "games.mll.meta2": "For students",
+          "games.mll.meta3": "Quests",
+          "common.more": "More",
+          "common.close": "Close",
+          "common.closeAria": "Close",
+          "common.toTop": "Back to top",
+          "series.title": "Series",
+          "series.badge": "Minecraft series",
+          "series.citadel.media": "Citadel series cover",
+          "series.citadel.title": "«Citadel» (Apocalypse)",
+          "series.citadel.genre": "Post-apocalypse · Drama · Survival",
+          "series.citadel.desc": "Georgie Criss — a former British secret agent and general — survives the virus from the Scottish Exclusion Zone. People live on rooftops. A dangerous road to the safe zone, mutants, bandits, moral dilemmas and flashbacks.",
+          "series.citadel.meta1": "Multi-episode",
+          "series.citadel.youtube": "Watch on YouTube",
+          "about.title": "About the studio",
+          "about.p1": " — a young indie studio specialising in Pixel Art games and Minecraft series. We believe that even a small team can create worlds that stay with the player long after the game ends.",
+          "about.p2": "Our philosophy — atmospheric worlds, deep stories and attention to detail. Every scene, every pixel and every line works towards immersion.",
+          "about.tool3d": "3D Modeling",
+          "about.feat1.title": "Atmosphere",
+          "about.feat1.desc": "Dark fantasy, post-apocalypse, educational worlds — every project has its own voice.",
+          "about.feat2.title": "Stories",
+          "about.feat2.desc": "Scripts with moral dilemmas, flashbacks and multiple endings.",
+          "about.feat3.title": "Details",
+          "about.feat3.desc": "Pixel art, custom builds, polished mechanics and visual motifs.",
+          "team.title": "Team",
+          "team.role1": "Game designer, artist, scriptwriter, builder",
+          "team.role2": "Editor",
+          "team.role3": "3D Modeler",
+          "team.role4": "Builder",
+          "team.role5": "Scriptwriter, artist, builder",
+          "contacts.title": "Contacts",
+          "contacts.name.label": "Name",
+          "contacts.name.ph": "Your name",
+          "contacts.name.err": "Enter your name",
+          "contacts.email.label": "Email",
+          "contacts.email.ph": "you@example.com",
+          "contacts.email.err": "Enter a valid email",
+          "contacts.msg.label": "Message",
+          "contacts.msg.ph": "Write to us...",
+          "contacts.msg.err": "Enter a message",
+          "contacts.submit": "Send",
+          "contacts.sending": "Sending…",
+          "contacts.success": "Thank you! We'll get back to you soon.",
+          "contacts.socials": "Find us on social media",
+          "contacts.emailNote": "Or write to us directly:",
+          "nav.hero": "Home", "nav.games": "Games", "nav.series": "Series",
+          "nav.about": "About", "nav.team": "Team", "nav.contacts": "Contacts",
+          "footer.copy": "Creating worlds worth returning to",
+          "footer.bottom": "© 2024–2026 ENTDEV Interactive. All rights reserved.",
+          "meta.title": "ENTDEV Interactive — Creating worlds worth returning to",
+          "meta.desc": "ENTDEV Interactive — indie studio. Pixel Art games and Minecraft series. Rule, Vlandria • My Little Laboratory • Citadel",
+          "modals.rv.genre": "2D pixel Metroidvania · Dark Fantasy",
+          "modals.rv.p1": "The action takes place in the world of Gardania in the 1730s. The protagonist Taro loses his memory after a mine explosion and sets off on a journey to remember his past.",
+          "modals.rv.li1": "16 Idols — the key artifacts of the world",
+          "modals.rv.li2": "The «Kabulator» device",
+          "modals.rv.li3": "The «Radiation» mechanic",
+          "modals.rv.li4": "6–8 endings",
+          "modals.rv.li5": "Green visual motif",
+          "modals.rv.li6": "Developed in Unity",
+          "modals.rv.status": "Status: in development",
+          "modals.rv.genreLabel": "Genre: Metroidvania",
+          "modals.rv.style": "Style: Pixel Art",
+          "modals.mll.genre": "Educational chemistry lab simulator",
+          "modals.mll.p1": "The game helps students understand chemistry through practice. The goal is to unlock the elements of Mendeleev's periodic table by decomposing complex substances into simple ones.",
+          "modals.mll.li1": "Quests and tasks",
+          "modals.mll.li2": "Rewards: substances, tools, currency",
+          "modals.mll.li3": "Gradual unlocking of periodic table elements",
+          "modals.mll.li4": "Great for learning chemistry",
+          "modals.mll.meta1": "Genre: simulator / education",
+          "modals.mll.meta2": "Audience: students"
+        },
+
+        ja: {
+          "skip": "コンテンツへスキップ",
+          "logo.home": "ENTDEV Interactive — ホームへ戻る",
+          "lang.selector": "言語を切り替え",
+          "menu.open": "メニューを開く",
+          "menu.close": "メニューを閉じる",
+          "hero.badge": "インディースタジオ・Pixel Art・Minecraft",
+          "hero.slogan": "「帰りたくなる世界を創る」",
+          "hero.desc": "没入感のある2DピクセルアートゲームとMinecraftシリーズを制作しています。深い物語、細部へのこだわり、そして長く心に残る世界を。",
+          "hero.ctaProjects": "プロジェクトを見る",
+          "hero.ctaContacts": "お問い合わせ",
+          "games.title": "ゲーム",
+          "games.badge.dev": "開発中",
+          "games.badge.edu": "教育用",
+          "games.rv.media": "『Rule, Vlandria』カバー",
+          "games.rv.genre": "2Dメトロイドヴァニア・ダークファンタジー",
+          "games.rv.desc": "世界ガルダニア（1730年代）を舞台にしたピクセルメトロイドヴァニア。鉱山の爆発で記憶を失った主人公タロが、過去を取り戻す旅に出る。16のイドル、装置「カブラトール」、「放射線」メカニクス、エンディング6〜8種。",
+          "games.rv.meta3": "緑のモチーフ",
+          "games.mll.media": "『My Little Laboratory』カバー",
+          "games.mll.genre": "シミュレーション・教育",
+          "games.mll.desc": "化学実験室の教育シミュレーター。複雑な物質を分解してメンデレーエフの周期表の元素を解放しよう。クエスト、報酬、通貨で化学が楽しく学べる。",
+          "games.mll.meta1": "シミュレーター",
+          "games.mll.meta2": "学生向け",
+          "games.mll.meta3": "クエスト",
+          "common.more": "詳細",
+          "common.close": "閉じる",
+          "common.closeAria": "閉じる",
+          "common.toTop": "ページ先頭へ",
+          "series.title": "シリーズ",
+          "series.badge": "Minecraftシリーズ",
+          "series.citadel.media": "『シタデル』シリーズのカバー",
+          "series.citadel.title": "『シタデル』（黙示録）",
+          "series.citadel.genre": "ポスト黙示録・ドラマ・サバイバル",
+          "series.citadel.desc": "元イギリス秘密情報部員であり将軍のジョージ・クリスは、スコットランド立入禁止区域のウイルスから生還した。人々は屋上で暮らしている。安全地帯への危険な道程、変異体、盗賊、道徳的ジレンマ、そしてフラッシュバック。",
+          "series.citadel.meta1": "複数エピソード",
+          "series.citadel.youtube": "YouTubeで見る",
+          "about.title": "スタジオについて",
+          "about.p1": "は、Pixel ArtゲームとMinecraftシリーズを手がける若いインディースタジオです。小さなチームでも、プレイヤーの心に長く残る世界を創れると信じています。",
+          "about.p2": "私たちの哲学は、雰囲気ある世界、深い物語、細部へのこだわり。すべてのシーン、すべてのピクセル、すべてのセリフが没入のために働きます。",
+          "about.tool3d": "3Dモデリング",
+          "about.feat1.title": "雰囲気",
+          "about.feat1.desc": "ダークファンタジー、ポスト黙示録、教育ワールド——プロジェクトごとに異なる個性。",
+          "about.feat2.title": "物語",
+          "about.feat2.desc": "道徳的ジレンマ、フラッシュバック、複数のエンディングを持つシナリオ。",
+          "about.feat3.title": "細部",
+          "about.feat3.desc": "ピクセルアート、カスタムビルド、練られたメカニクスとビジュアルモチーフ。",
+          "team.title": "チーム",
+          "team.role1": "ゲームデザイナー・アーティスト・シナリオライター・ビルダー",
+          "team.role2": "編集者",
+          "team.role3": "3Dモデラー",
+          "team.role4": "ビルダー",
+          "team.role5": "シナリオライター・アーティスト・ビルダー",
+          "contacts.title": "お問い合わせ",
+          "contacts.name.label": "お名前",
+          "contacts.name.ph": "お名前",
+          "contacts.name.err": "名前を入力してください",
+          "contacts.email.label": "メールアドレス",
+          "contacts.email.ph": "you@example.com",
+          "contacts.email.err": "正しいメールアドレスを入力してください",
+          "contacts.msg.label": "メッセージ",
+          "contacts.msg.ph": "メッセージをどうぞ…",
+          "contacts.msg.err": "メッセージを入力してください",
+          "contacts.submit": "送信",
+          "contacts.sending": "送信中…",
+          "contacts.success": "ありがとうございます！近日中にご連絡いたします。",
+          "contacts.socials": "SNSでフォロー",
+          "contacts.emailNote": "または直接メールで：",
+          "nav.hero": "ホーム", "nav.games": "ゲーム", "nav.series": "シリーズ",
+          "nav.about": "スタジオについて", "nav.team": "チーム", "nav.contacts": "お問い合わせ",
+          "footer.copy": "帰りたくなる世界を創る",
+          "footer.bottom": "© 2024–2026 ENTDEV Interactive。全著作権所有。",
+          "meta.title": "ENTDEV Interactive — 帰りたくなる世界を創る",
+          "meta.desc": "ENTDEV Interactive — インディースタジオ。Pixel ArtゲームとMinecraftシリーズ。Rule, Vlandria • My Little Laboratory • シタデル",
+          "modals.rv.genre": "2Dピクセルメトロイドヴァニア・ダークファンタジー",
+          "modals.rv.p1": "舞台は1730年代の世界ガルダニア。主人公タロは鉱山の爆発で記憶を失い、過去を取り戻す旅に出る。",
+          "modals.rv.li1": "16のイドル——世界の鍵となる遺物",
+          "modals.rv.li2": "装置「カブラトール」",
+          "modals.rv.li3": "「放射線」メカニクス",
+          "modals.rv.li4": "エンディング6〜8種",
+          "modals.rv.li5": "緑のビジュアルモチーフ",
+          "modals.rv.li6": "Unityで開発",
+          "modals.rv.status": "ステータス：開発中",
+          "modals.rv.genreLabel": "ジャンル：メトロイドヴァニア",
+          "modals.rv.style": "スタイル：Pixel Art",
+          "modals.mll.genre": "化学実験室の教育シミュレーター",
+          "modals.mll.p1": "実践を通して化学を学ぶためのゲーム。複雑な物質を分解してメンデレーエフの周期表の元素を解放していく。",
+          "modals.mll.li1": "クエストと課題",
+          "modals.mll.li2": "報酬：物質・道具・通貨",
+          "modals.mll.li3": "周期表の元素を段階的に解放",
+          "modals.mll.li4": "化学の学習に最適",
+          "modals.mll.meta1": "ジャンル：シミュレーション／教育",
+          "modals.mll.meta2": "対象：学生"
+        }
+      };
+
+      function t(key) {
+        return I18N[currentLang][key] ?? I18N.ru[key] ?? key;
+      }
+
+      function getSavedLang() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          return LOCALES.includes(saved) ? saved : null;
+        } catch (e) { return null; }
+      }
+      function saveLang(lang) {
+        try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
+      }
+
+      /* ========== Navigation: единый источник ссылок ========== */
+      const NAV_SECTIONS = ["hero", "games", "series", "about", "team", "contacts"];
+      const navDesktop = document.getElementById("navDesktop");
+      const navMobile = document.getElementById("navMobile");
+      const footerNav = document.getElementById("footerNav");
+      const hamburger = document.getElementById("hamburger");
+      const backToTop = document.getElementById("backToTop");
+      const submitBtn = document.getElementById("submitBtn");
+      let scrollNavLinks = [];
+
+      function renderNav() {
+        navDesktop.replaceChildren();
+        navMobile.replaceChildren();
+        footerNav.replaceChildren();
+
+        for (const id of NAV_SECTIONS) {
+          const label = t("nav." + id);
+          const link = document.createElement("a");
+          link.href = "#" + id;
+          link.className = "nav-link" + (id === "hero" ? " active" : "");
+          link.dataset.section = id;
+          link.textContent = label;
+          navDesktop.appendChild(link);
+
+          navMobile.appendChild(link.cloneNode(true));
+
+          const footerLink = document.createElement("a");
+          footerLink.href = "#" + id;
+          footerLink.textContent = label;
+          footerNav.appendChild(footerLink);
+        }
+        scrollNavLinks = document.querySelectorAll(".nav-link[data-section]");
+      }
+
+      /* ================================================================
+         ПРИМЕНЕНИЕ ПЕРЕВОДОВ
+         ================================================================ */
+      let currentLang = getSavedLang() || "ru";
+
+      function applyTranslations() {
+        document.documentElement.lang = currentLang;
+
+        // Текстовые узлы
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          el.textContent = t(el.dataset.i18n);
+        });
+        // Placeholder'ы полей формы
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+          el.placeholder = t(el.dataset.i18nPlaceholder);
+        });
+        // aria-label
+        document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+          el.setAttribute("aria-label", t(el.dataset.i18nAria));
+        });
+
+        // Динамические атрибуты
+        hamburger.setAttribute(
+          "aria-label",
+          t(navMobile.classList.contains("open") ? "menu.close" : "menu.open")
+        );
+
+        // Заголовок вкладки и SEO-мета
+        document.title = t("meta.title");
+        document.querySelector('meta[name="description"]').setAttribute("content", t("meta.desc"));
+        document.getElementById("ogTitle").setAttribute("content", t("meta.title"));
+        document.getElementById("ogDesc").setAttribute("content", t("meta.desc"));
+        document.getElementById("twTitle").setAttribute("content", t("meta.title"));
+        document.getElementById("twDesc").setAttribute("content", t("meta.desc"));
+
+        // Навигация и состояние переключателя
+        renderNav();
+        document.querySelectorAll("[data-lang]").forEach((btn) => {
+          const active = btn.dataset.lang === currentLang;
+          btn.classList.toggle("active", active);
+          btn.setAttribute("aria-pressed", String(active));
+        });
+      }
+
+      /* ========== Language switcher ========== */
+      document.querySelectorAll("[data-lang]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const lang = btn.dataset.lang;
+          if (lang === currentLang) return;
+          currentLang = lang;
+          saveLang(lang);
+          applyTranslations();
+        });
+      });
+
+      /* ========== Mobile menu ========== */
+      hamburger.addEventListener("click", () => {
+        const open = navMobile.classList.toggle("open");
+        hamburger.classList.toggle("open", open);
+        hamburger.setAttribute("aria-expanded", String(open));
+        hamburger.setAttribute("aria-label", t(open ? "menu.close" : "menu.open"));
+      });
+
+      navMobile.addEventListener("click", (e) => {
+        if (e.target.closest("a")) {
+          navMobile.classList.remove("open");
+          hamburger.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          hamburger.setAttribute("aria-label", t("menu.open"));
+        }
+      });
+
+      /* ========== Scroll: scrollspy + back-to-top (один rAF-цикл) ========== */
+      let ticking = false;
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const offset = scrollY + 100;
+          let current = "hero";
+          for (const id of NAV_SECTIONS) {
+            const el = document.getElementById(id);
+            if (el && el.offsetTop <= offset) current = id;
+          }
+          scrollNavLinks.forEach((link) => {
+            link.classList.toggle("active", link.dataset.section === current);
+          });
+          backToTop.classList.toggle("visible", scrollY > 400);
+          ticking = false;
+        });
+      }
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      /* ========== Modals (native <dialog>) ========== */
+      const modalTriggers = document.querySelectorAll("[data-modal]");
+      const modalDialogs = document.querySelectorAll("dialog.modal");
+
+      modalTriggers.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const dialog = document.getElementById(btn.dataset.modal);
+          if (dialog && !dialog.open) {
+            document.body.classList.add("dialog-open");
+            dialog.showModal();
+          }
+        });
+      });
+
+      modalDialogs.forEach((dialog) => {
+        dialog.addEventListener("click", (e) => {
+          if (e.target.closest("[data-close]")) {
+            dialog.close();
+            return;
+          }
+          const rect = dialog.getBoundingClientRect();
+          const inside =
+            e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom;
+          if (!inside) dialog.close();
+        });
+        dialog.addEventListener("close", () => {
+          document.body.classList.remove("dialog-open");
+        });
+      });
+
+      /* ========== Form: демо-валидация с ARIA ========== */
+      const form = document.getElementById("contactForm");
+      const successRegion = document.getElementById("formSuccess");
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      const fields = [
+        { input: document.getElementById("name"),    error: document.getElementById("nameError"),    test: (v) => Boolean(v) },
+        { input: document.getElementById("email"),   error: document.getElementById("emailError"),   test: (v) => emailRe.test(v) },
+        { input: document.getElementById("message"), error: document.getElementById("messageError"), test: (v) => Boolean(v) }
+      ];
+
+      function validateField(field) {
+        const ok = field.test(field.input.value.trim());
+        field.input.setAttribute("aria-invalid", String(!ok));
+        field.error.hidden = ok;
+        return ok;
+      }
+
+      fields.forEach((field) => {
+        field.input.addEventListener("input", () => {
+          field.error.hidden = true;
+          field.input.setAttribute("aria-invalid", "false");
+        });
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const results = fields.map(validateField);
+        const valid = results.every(Boolean);
+        if (!valid) {
+          const firstInvalid = fields.find((f, i) => !results[i]);
+          firstInvalid.input.focus();
+          return;
+        }
+
+        /* Демо-отправка: имитация запроса к серверу */
+        submitBtn.disabled = true;
+        submitBtn.textContent = t("contacts.sending");
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = t("contacts.submit");
+          form.reset();
+          fields.forEach((f) => f.input.setAttribute("aria-invalid", "false"));
+          successRegion.hidden = false;
+          setTimeout(() => { successRegion.hidden = true; }, 5000);
+        }, 900);
+      });
+
+      /* ========== Scroll reveal ========== */
+      if ("IntersectionObserver" in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+        document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+      } else {
+        document.querySelectorAll(".reveal").forEach((el) => el.classList.add("visible"));
+      }
+
+      /* ========== Initial translation ========== */
+      applyTranslations();
+    })();
+  </script>
+</body>
+</html>
