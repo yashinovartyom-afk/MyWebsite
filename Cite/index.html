@@ -364,6 +364,15 @@
     .btn-blue { border-color: var(--accent-blue); color: var(--accent-blue); }
     .btn-blue:hover { background: var(--accent-blue); color: var(--on-accent); }
     .btn-sm { padding: 0.45rem 0.9rem; font-size: 0.75rem; }
+    /* Неактивная кнопка: полностью некликабельна */
+    .btn.is-disabled,
+    .btn[aria-disabled="true"] {
+      pointer-events: none;
+      cursor: default;
+      opacity: 0.7;
+      transform: none;
+      box-shadow: none;
+    }
 
     /* ========== 7. Hero ========== */
     .hero {
@@ -791,10 +800,14 @@
       width: min(560px, 100%);
       max-height: 85vh;
       overflow-y: auto;
-      padding: 1.75rem;
-      position: relative;
-      margin: auto;
       box-shadow: 0 10px 0 rgba(0, 0, 0, 0.5);
+    }
+    /* Внутренняя обёртка: контекст позиционирования для кнопки закрытия.
+       position/margin диалога НЕ переопределяем — иначе ломается нативное
+       центрирование <dialog> в верхнем слое (UA: position: fixed + margin: auto). */
+    dialog.modal .modal-inner {
+      position: relative;
+      padding: 1.75rem;
     }
     dialog.modal::backdrop {
       background:
@@ -1024,13 +1037,12 @@
                 <span>Minecraft</span>
               </div>
               <div class="card-actions">
-                <a href="https://www.youtube.com/watch?v=AXQeUorpIzQ"
-                   class="btn btn-orange btn-sm"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   data-i18n="series.citadel.youtube">
-                  Смотреть на YouTube
-                </a>
+                <span class="btn btn-orange btn-sm is-disabled"
+                      role="none"
+                      aria-disabled="true"
+                      data-i18n="series.citadel.filming">
+                  На стадии съёмок
+                </span>
               </div>
             </div>
           </article>
@@ -1197,48 +1209,52 @@
 
   <!-- ========== MODALS (native dialog) ========== -->
   <dialog class="modal" id="modal-rv" aria-labelledby="modal-rv-title">
-    <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
-    <h3 id="modal-rv-title">Saga of Lost Souls</h3>
-    <p class="card-genre modal-genre" data-i18n="modals.rv.genre">2D-пиксельная метроидвания · Мрачное фэнтези</p>
-    <p data-i18n="modals.rv.p1">
-      Действие разворачивается в мире Гардынии в 1730-х годах. Главный герой Таро теряет память
-      после взрыва в шахтах и отправляется в путешествие, чтобы вспомнить своё прошлое.
-    </p>
-    <ul class="modal-list">
-      <li data-i18n="modals.rv.li1">16 Идолов — ключевые артефакты мира</li>
-      <li data-i18n="modals.rv.li2">Устройство «Кабулатор»</li>
-      <li data-i18n="modals.rv.li3">Механика «Радиация»</li>
-      <li data-i18n="modals.rv.li4">6–8 концовок</li>
-      <li data-i18n="modals.rv.li5">Зелёный визуальный мотив</li>
-      <li data-i18n="modals.rv.li6">Разработка на Unity</li>
-    </ul>
-    <div class="modal-meta">
-      <span data-i18n="modals.rv.status">Статус: в разработке</span>
-      <span data-i18n="modals.rv.genreLabel">Жанр: метроидвания</span>
-      <span data-i18n="modals.rv.style">Стиль: Pixel Art</span>
+    <div class="modal-inner">
+      <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
+      <h3 id="modal-rv-title">Saga of Lost Souls</h3>
+      <p class="card-genre modal-genre" data-i18n="modals.rv.genre">2D-пиксельная метроидвания · Мрачное фэнтези</p>
+      <p data-i18n="modals.rv.p1">
+        Действие разворачивается в мире Гардынии в 1730-х годах. Главный герой Таро теряет память
+        после взрыва в шахтах и отправляется в путешествие, чтобы вспомнить своё прошлое.
+      </p>
+      <ul class="modal-list">
+        <li data-i18n="modals.rv.li1">16 Идолов — ключевые артефакты мира</li>
+        <li data-i18n="modals.rv.li2">Устройство «Кабулатор»</li>
+        <li data-i18n="modals.rv.li3">Механика «Радиация»</li>
+        <li data-i18n="modals.rv.li4">6–8 концовок</li>
+        <li data-i18n="modals.rv.li5">Зелёный визуальный мотив</li>
+        <li data-i18n="modals.rv.li6">Разработка на Unity</li>
+      </ul>
+      <div class="modal-meta">
+        <span data-i18n="modals.rv.status">Статус: в разработке</span>
+        <span data-i18n="modals.rv.genreLabel">Жанр: метроидвания</span>
+        <span data-i18n="modals.rv.style">Стиль: Pixel Art</span>
+      </div>
+      <button class="btn btn-outline btn-sm" data-close type="button" data-i18n="common.close">Закрыть</button>
     </div>
-    <button class="btn btn-outline btn-sm" data-close type="button" data-i18n="common.close">Закрыть</button>
   </dialog>
 
   <dialog class="modal" id="modal-mll" aria-labelledby="modal-mll-title">
-    <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
-    <h3 id="modal-mll-title">My Little Laboratory</h3>
-    <p class="card-genre blue modal-genre" data-i18n="modals.mll.genre">Образовательный симулятор химической лаборатории</p>
-    <p data-i18n="modals.mll.p1">
-      Игра помогает школьникам понять химию через практику. Задача — открытие химических элементов
-      периодической системы им. Менделеева путём разложения сложных веществ на простые.
-    </p>
-    <ul class="modal-list">
-      <li data-i18n="modals.mll.li1">Квесты и задания</li>
-      <li data-i18n="modals.mll.li2">Награды: вещества, инструменты, валюта</li>
-      <li data-i18n="modals.mll.li3">Постепенное открытие элементов ПСХЭ</li>
-      <li data-i18n="modals.mll.li4">Подходит для изучения химии</li>
-    </ul>
-    <div class="modal-meta">
-      <span data-i18n="modals.mll.meta1">Жанр: симулятор / образование</span>
-      <span data-i18n="modals.mll.meta2">Аудитория: школьники</span>
+    <div class="modal-inner">
+      <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
+      <h3 id="modal-mll-title">My Little Laboratory</h3>
+      <p class="card-genre blue modal-genre" data-i18n="modals.mll.genre">Образовательный симулятор химической лаборатории</p>
+      <p data-i18n="modals.mll.p1">
+        Игра помогает школьникам понять химию через практику. Задача — открытие химических элементов
+        периодической системы им. Менделеева путём разложения сложных веществ на простые.
+      </p>
+      <ul class="modal-list">
+        <li data-i18n="modals.mll.li1">Квесты и задания</li>
+        <li data-i18n="modals.mll.li2">Награды: вещества, инструменты, валюта</li>
+        <li data-i18n="modals.mll.li3">Постепенное открытие элементов ПСХЭ</li>
+        <li data-i18n="modals.mll.li4">Подходит для изучения химии</li>
+      </ul>
+      <div class="modal-meta">
+        <span data-i18n="modals.mll.meta1">Жанр: симулятор / образование</span>
+        <span data-i18n="modals.mll.meta2">Аудитория: школьники</span>
+      </div>
+      <button class="btn btn-outline btn-sm" data-close type="button" data-i18n="common.close">Закрыть</button>
     </div>
-    <button class="btn btn-outline btn-sm" data-close type="button" data-i18n="common.close">Закрыть</button>
   </dialog>
 
   <script>
@@ -1288,7 +1304,7 @@
           "series.citadel.genre": "Постапокалипсис · Драма · Выживание",
           "series.citadel.desc": "Джорджи Крисс — бывший английский секретный агент и генерал — выживает после вируса из Шотландской Зоны Отчуждения. Люди живут на крышах. Путь к безопасной зоне, мутанты, бандиты, моральные дилеммы и флешбэки.",
           "series.citadel.meta1": "Многосерийный",
-          "series.citadel.youtube": "Смотреть на YouTube",
+          "series.citadel.filming": "На стадии съёмок",
           "about.title": "О студии",
           "about.p1": " — молодая инди-студия, специализирующаяся на Pixel Art играх и Minecraft-сериалах. Мы верим, что даже небольшая команда может создавать миры, которые остаются с игроком надолго.",
           "about.p2": "Наша философия — атмосферные миры, глубокие истории и внимание к деталям. Каждая сцена, каждый пиксель и каждая реплика работают на погружение.",
@@ -1383,7 +1399,7 @@
           "series.citadel.genre": "Post-apocalypse · Drama · Survival",
           "series.citadel.desc": "Georgie Criss — a former British secret agent and general — survives the virus from the Scottish Exclusion Zone. People live on rooftops. A dangerous road to the safe zone, mutants, bandits, moral dilemmas and flashbacks.",
           "series.citadel.meta1": "Multi-episode",
-          "series.citadel.youtube": "Watch on YouTube",
+          "series.citadel.filming": "In filming stage",
           "about.title": "About the studio",
           "about.p1": " — a young indie studio specialising in Pixel Art games and Minecraft series. We believe that even a small team can create worlds that stay with the player long after the game ends.",
           "about.p2": "Our philosophy — atmospheric worlds, deep stories and attention to detail. Every scene, every pixel and every line works towards immersion.",
@@ -1478,7 +1494,7 @@
           "series.citadel.genre": "ポスト黙示録・ドラマ・サバイバル",
           "series.citadel.desc": "元イギリス秘密情報部員であり将軍のジョージ・クリスは、スコットランド立入禁止区域のウイルスから生還した。人々は屋上で暮らしている。安全地帯への危険な道程、変異体、盗賊、道徳的ジレンマ、そしてフラッシュバック。",
           "series.citadel.meta1": "複数エピソード",
-          "series.citadel.youtube": "YouTubeで見る",
+          "series.citadel.filming": "撮影段階",
           "about.title": "スタジオについて",
           "about.p1": "は、Pixel ArtゲームとMinecraftシリーズを手がける若いインディースタジオです。小さなチームでも、プレイヤーの心に長く残る世界を創れると信じています。",
           "about.p2": "私たちの哲学は、雰囲気ある世界、深い物語、細部へのこだわり。すべてのシーン、すべてのピクセル、すべてのセリフが没入のために働きます。",
@@ -1594,8 +1610,9 @@
       function applyTranslations() {
         document.documentElement.lang = currentLang;
 
-        // Текстовые узлы
+        // Текстовые узлы (label кнопки «Отправить» не трогаем во время демо-отправки)
         document.querySelectorAll("[data-i18n]").forEach((el) => {
+          if (el === submitBtn && submitBtn.disabled) return;
           el.textContent = t(el.dataset.i18n);
         });
         // Placeholder'ы полей формы
@@ -1628,6 +1645,9 @@
           btn.classList.toggle("active", active);
           btn.setAttribute("aria-pressed", String(active));
         });
+
+        // После перерисовки навигации возвращаем подсветку активного раздела
+        onScroll();
       }
 
       /* ========== Language switcher ========== */
@@ -1642,36 +1662,50 @@
       });
 
       /* ========== Mobile menu ========== */
-      hamburger.addEventListener("click", () => {
-        const open = navMobile.classList.toggle("open");
+      function setMobileMenu(open) {
+        navMobile.classList.toggle("open", open);
         hamburger.classList.toggle("open", open);
         hamburger.setAttribute("aria-expanded", String(open));
         hamburger.setAttribute("aria-label", t(open ? "menu.close" : "menu.open"));
+      }
+
+      hamburger.addEventListener("click", () => {
+        setMobileMenu(!navMobile.classList.contains("open"));
       });
 
       navMobile.addEventListener("click", (e) => {
-        if (e.target.closest("a")) {
-          navMobile.classList.remove("open");
-          hamburger.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          hamburger.setAttribute("aria-label", t("menu.open"));
-        }
+        if (e.target.closest("a")) setMobileMenu(false);
+      });
+
+      /* Esc закрывает мобильное меню */
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && navMobile.classList.contains("open")) setMobileMenu(false);
       });
 
       /* ========== Scroll: scrollspy + back-to-top (один rAF-цикл) ========== */
       let ticking = false;
+      let scrollAnimating = false; /* флаг анимации «прыжка» к выбранной вкладке */
+      let pendingSection = null;   /* вкладка, куда выполняется переключение */
 
       function onScroll() {
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => {
           const scrollY = window.scrollY;
+          const doc = document.documentElement;
+          /* На высоких окнах последнюю секцию невозможно доскроллить до offsetTop
+             из-за ограничения прокрутки: подсвечиваем её при достижении дна страницы */
+          const atBottom = scrollY + window.innerHeight >= doc.scrollHeight - 4;
           const offset = scrollY + 100;
           let current = "hero";
           for (const id of NAV_SECTIONS) {
             const el = document.getElementById(id);
             if (el && el.offsetTop <= offset) current = id;
           }
+          if (atBottom) current = NAV_SECTIONS[NAV_SECTIONS.length - 1];
+          /* Пока идёт анимация перехода, подсветка «ждёт» на выбранной вкладке
+             и не пробегает по промежуточным разделам */
+          if (scrollAnimating && pendingSection) current = pendingSection;
           scrollNavLinks.forEach((link) => {
             link.classList.toggle("active", link.dataset.section === current);
           });
@@ -1683,7 +1717,72 @@
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
 
+      /* Клик по внутренним якорям: одинаковая скорость перехода к любой вкладке.
+         Индикатор сразу перемещается к выбранной вкладке, прокрутка занимает
+         фиксированные 500 мс независимо от расстояния. */
+      const headerElAnchor = document.getElementById("header");
+      const HEADER_OFFSET = headerElAnchor ? headerElAnchor.offsetHeight : 64;
+      /* Токен отменяет незавершённую анимацию прокрутки при новом запросе */
+      let scrollAnimToken = 0;
+      let navJumpTimer = 0;
+
+      function animateScrollTo(targetY, duration) {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          window.scrollTo({ top: targetY, behavior: "auto" });
+          return;
+        }
+        const token = ++scrollAnimToken;
+        const startY = window.scrollY;
+        const delta = targetY - startY;
+        if (Math.abs(delta) < 2) return;
+        const startTime = performance.now();
+        const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+        const step = (now) => {
+          if (token !== scrollAnimToken) return; /* анимацию прервал новый запрос прокрутки */
+          const progress = Math.min(1, (now - startTime) / duration);
+          window.scrollTo({ top: startY + delta * easeInOut(progress), behavior: "auto" });
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            onScroll();
+          }
+        };
+        requestAnimationFrame(step);
+      }
+
+      document.addEventListener("click", (e) => {
+        const anchor = e.target.closest('a[href^="#"]');
+        if (!anchor) return;
+        const id = anchor.getAttribute("href");
+        if (id === "#" || id === "#main") return; /* skip-link и пустые якоря — обычное поведение */
+        const targetId = id.slice(1);
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+        e.preventDefault();
+
+        /* Отменяем предыдущую незавершённую прокрутку при повторном клике */
+        clearTimeout(navJumpTimer);
+        scrollAnimToken++;
+        pendingSection = targetId;
+        /* Мгновенно подсвечиваем выбранную вкладку */
+        scrollNavLinks.forEach((link) => {
+          link.classList.toggle("active", link.dataset.section === targetId);
+        });
+
+        scrollAnimating = true;
+        animateScrollTo(targetEl.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET, 500);
+        navJumpTimer = setTimeout(() => {
+          scrollAnimating = false;
+          pendingSection = null;
+          onScroll();
+        }, 700);
+      });
+
       backToTop.addEventListener("click", () => {
+        scrollAnimToken++;            /* отменяем незавершённый «прыжок» к якорю */
+        clearTimeout(navJumpTimer);
+        scrollAnimating = false;
+        pendingSection = null;
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
