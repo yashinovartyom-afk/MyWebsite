@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ENTDEV Interactive — инди-студия. Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель">
+  <meta name="description" content="ENTDEV Interactive — инди-студия. Pixel Art игры и Minecraft-сериалы. Saga of Lost Souls • My Little Laboratory • Цитадель">
   <meta name="theme-color" content="#0d0d0d">
 
   <!-- Favicon (inline SVG, чтобы не нарушать ограничение «один файл») -->
@@ -14,12 +14,12 @@
   <meta property="og:locale" content="ru_RU">
   <meta property="og:site_name" content="ENTDEV Interactive">
   <meta property="og:title" id="ogTitle" content="ENTDEV Interactive — Создаём миры, в которые хочется вернуться">
-  <meta property="og:description" id="ogDesc" content="Инди-студия: Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель">
+  <meta property="og:description" id="ogDesc" content="Инди-студия: Pixel Art игры и Minecraft-сериалы. Saga of Lost Souls • My Little Laboratory • Цитадель">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" id="twTitle" content="ENTDEV Interactive — Создаём миры, в которые хочется вернуться">
-  <meta name="twitter:description" id="twDesc" content="Инди-студия: Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель">
+  <meta name="twitter:description" id="twDesc" content="Инди-студия: Pixel Art игры и Minecraft-сериалы. Saga of Lost Souls • My Little Laboratory • Цитадель">
 
   <title>ENTDEV Interactive — Создаём миры, в которые хочется вернуться</title>
 
@@ -234,18 +234,15 @@
     @media (max-width: 480px) {
       .logo { font-size: 0.9rem; }
     }
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-green-light));
+    .logo-img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
       border: 1px solid var(--border-light);
       box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
-      display: grid;
-      place-items: center;
-      font-size: 0.7rem;
-      color: var(--on-accent);
-      font-weight: 900;
+      background: var(--bg-card);
       image-rendering: pixelated;
+      flex-shrink: 0;
     }
 
     /* Language switcher */
@@ -473,6 +470,15 @@
       position: relative;
       overflow: hidden;
       border-bottom: 3px solid var(--border-light);
+    }
+    .card-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: pixelated;
+      display: block;
     }
     .card-media-rv {
       background:
@@ -854,7 +860,8 @@
   <header class="header" id="header">
     <div class="container header-inner">
       <a href="#hero" class="logo" data-i18n-aria="logo.home" aria-label="ENTDEV Interactive — на главную">
-        <span class="logo-icon" aria-hidden="true">E</span>
+        <!-- Логотип студии (ETNDEV_Logo.png в корне проекта) -->
+        <img src="../ETNDEV_Logo.png" class="logo-img" alt="" aria-hidden="true">
         ENTDEV Interactive
       </a>
 
@@ -913,13 +920,14 @@
       <div class="container">
         <h2 class="section-title reveal" data-i18n="games.title">Игры</h2>
         <div class="cards-grid">
-          <!-- Rule, Vlandria -->
+          <!-- Saga of Lost Souls -->
           <article class="card reveal">
-            <div class="card-media card-media-rv" role="img" data-i18n-aria="games.rv.media" aria-label="Обложка Rule, Vlandria">
+            <div class="card-media card-media-rv" role="img" data-i18n-aria="games.rv.media" aria-label="Обложка Saga of Lost Souls">
+              <img src="../Saga%20of%20Lost%20Souls.png" alt="" loading="lazy">
               <span class="card-badge badge-dev" data-i18n="games.badge.dev">В разработке</span>
             </div>
             <div class="card-body">
-              <h3>Rule, Vlandria</h3>
+              <h3>Saga of Lost Souls</h3>
               <p class="card-genre" data-i18n="games.rv.genre">2D-метроидвания · Мрачное фэнтези</p>
               <p class="card-desc" data-i18n="games.rv.desc">
                 Пиксельная метроидвания в мире Гардынии (1730-е). Таро теряет память после взрыва в шахтах
@@ -939,6 +947,7 @@
           <!-- My Little Laboratory -->
           <article class="card reveal">
             <div class="card-media card-media-mll" role="img" data-i18n-aria="games.mll.media" aria-label="Обложка My Little Laboratory">
+              <img src="../MLL.png" alt="" loading="lazy">
               <span class="card-badge badge-edu" data-i18n="games.badge.edu">Образовательная</span>
             </div>
             <div class="card-body">
@@ -969,6 +978,7 @@
         <div class="cards-grid cards-grid--narrow">
           <article class="card reveal">
             <div class="card-media card-media-citadel" role="img" data-i18n-aria="series.citadel.media" aria-label="Обложка сериала Цитадель">
+              <img src="../Citadel.png" alt="" loading="lazy">
               <span class="card-badge badge-series" data-i18n="series.badge">Minecraft-сериал</span>
             </div>
             <div class="card-body">
@@ -1158,7 +1168,7 @@
   <!-- ========== MODALS (native dialog) ========== -->
   <dialog class="modal" id="modal-rv" aria-labelledby="modal-rv-title">
     <button class="modal-close" data-close type="button" data-i18n-aria="common.closeAria" aria-label="Закрыть">×</button>
-    <h3 id="modal-rv-title">Rule, Vlandria</h3>
+    <h3 id="modal-rv-title">Saga of Lost Souls</h3>
     <p class="card-genre modal-genre" data-i18n="modals.rv.genre">2D-пиксельная метроидвания · Мрачное фэнтези</p>
     <p data-i18n="modals.rv.p1">
       Действие разворачивается в мире Гардынии в 1730-х годах. Главный герой Таро теряет память
@@ -1226,7 +1236,7 @@
           "games.title": "Игры",
           "games.badge.dev": "В разработке",
           "games.badge.edu": "Образовательная",
-          "games.rv.media": "Обложка Rule, Vlandria",
+          "games.rv.media": "Обложка Saga of Lost Souls",
           "games.rv.genre": "2D-метроидвания · Мрачное фэнтези",
           "games.rv.desc": "Пиксельная метроидвания в мире Гардынии (1730-е). Таро теряет память после взрыва в шахтах и пытается вспомнить прошлое. 16 Идолов, устройство Кабулатор, «Радиация», 6–8 концовок.",
           "games.rv.meta3": "Зелёный мотив",
@@ -1284,7 +1294,7 @@
           "footer.copy": "Создаём миры, в которые хочется вернуться",
           "footer.bottom": "© 2024–2026 ENTDEV Interactive. Все права защищены.",
           "meta.title": "ENTDEV Interactive — Создаём миры, в которые хочется вернуться",
-          "meta.desc": "ENTDEV Interactive — инди-студия. Pixel Art игры и Minecraft-сериалы. Rule, Vlandria • My Little Laboratory • Цитадель",
+          "meta.desc": "ENTDEV Interactive — инди-студия. Pixel Art игры и Minecraft-сериалы. Saga of Lost Souls • My Little Laboratory • Цитадель",
           "modals.rv.genre": "2D-пиксельная метроидвания · Мрачное фэнтези",
           "modals.rv.p1": "Действие разворачивается в мире Гардынии в 1730-х годах. Главный герой Таро теряет память после взрыва в шахтах и отправляется в путешествие, чтобы вспомнить своё прошлое.",
           "modals.rv.li1": "16 Идолов — ключевые артефакты мира",
@@ -1320,7 +1330,7 @@
           "games.title": "Games",
           "games.badge.dev": "In development",
           "games.badge.edu": "Educational",
-          "games.rv.media": "Rule, Vlandria cover",
+          "games.rv.media": "Saga of Lost Souls cover",
           "games.rv.genre": "2D Metroidvania · Dark Fantasy",
           "games.rv.desc": "A pixel Metroidvania set in the world of Gardania (1730s). Taro loses his memory after a mine explosion and sets out to remember his past. 16 Idols, the Kabulator device, the «Radiation» mechanic, 6–8 endings.",
           "games.rv.meta3": "Green motif",
@@ -1378,7 +1388,7 @@
           "footer.copy": "Creating worlds worth returning to",
           "footer.bottom": "© 2024–2026 ENTDEV Interactive. All rights reserved.",
           "meta.title": "ENTDEV Interactive — Creating worlds worth returning to",
-          "meta.desc": "ENTDEV Interactive — indie studio. Pixel Art games and Minecraft series. Rule, Vlandria • My Little Laboratory • Citadel",
+          "meta.desc": "ENTDEV Interactive — indie studio. Pixel Art games and Minecraft series. Saga of Lost Souls • My Little Laboratory • Citadel",
           "modals.rv.genre": "2D pixel Metroidvania · Dark Fantasy",
           "modals.rv.p1": "The action takes place in the world of Gardania in the 1730s. The protagonist Taro loses his memory after a mine explosion and sets off on a journey to remember his past.",
           "modals.rv.li1": "16 Idols — the key artifacts of the world",
@@ -1414,7 +1424,7 @@
           "games.title": "ゲーム",
           "games.badge.dev": "開発中",
           "games.badge.edu": "教育用",
-          "games.rv.media": "『Rule, Vlandria』カバー",
+          "games.rv.media": "『Saga of Lost Souls』カバー",
           "games.rv.genre": "2Dメトロイドヴァニア・ダークファンタジー",
           "games.rv.desc": "世界ガルダニア（1730年代）を舞台にしたピクセルメトロイドヴァニア。鉱山の爆発で記憶を失った主人公タロが、過去を取り戻す旅に出る。16のイドル、装置「カブラトール」、「放射線」メカニクス、エンディング6〜8種。",
           "games.rv.meta3": "緑のモチーフ",
@@ -1472,7 +1482,7 @@
           "footer.copy": "帰りたくなる世界を創る",
           "footer.bottom": "© 2024–2026 ENTDEV Interactive。全著作権所有。",
           "meta.title": "ENTDEV Interactive — 帰りたくなる世界を創る",
-          "meta.desc": "ENTDEV Interactive — インディースタジオ。Pixel ArtゲームとMinecraftシリーズ。Rule, Vlandria • My Little Laboratory • シタデル",
+          "meta.desc": "ENTDEV Interactive — インディースタジオ。Pixel ArtゲームとMinecraftシリーズ。Saga of Lost Souls • My Little Laboratory • シタデル",
           "modals.rv.genre": "2Dピクセルメトロイドヴァニア・ダークファンタジー",
           "modals.rv.p1": "舞台は1730年代の世界ガルダニア。主人公タロは鉱山の爆発で記憶を失い、過去を取り戻す旅に出る。",
           "modals.rv.li1": "16のイドル——世界の鍵となる遺物",
